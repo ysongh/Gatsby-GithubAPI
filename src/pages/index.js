@@ -12,12 +12,14 @@ class IndexPage extends Component{
     error: ""
   }
 
-  async onSubmit(){
+  async onSubmit(e){
+    e.preventDefault();
+
     const graphqlQuery = {
       query: `
         query { 
           organization(login: "${this.state.organization}"){
-            repositories(first: 10) {
+            repositories(first: 12) {
               totalCount
               nodes{
                 id
@@ -66,22 +68,39 @@ class IndexPage extends Component{
       <SEO title="Home" />
       <h1>Gatsby and Github</h1>
       <p>Find information about your organisation from Github</p>
-      <input
-        type="text"
-        name="organization"
-        value={this.state.organization}
-        onChange={this.onChange.bind(this)} 
-      />
-      <button onClick={this.onSubmit.bind(this)}>Search</button>
-      <p>{this.state.error}</p>
-      {this.state.data.map(repo => {
-        return (
-          <div key={repo.id}>
-            <p>{repo.name}</p>
-          </div>
-        )
-      })}
-      <Link to="/page-2/">Go to page 2</Link>
+      <form className="form-inline" onSubmit={this.onSubmit.bind(this)}>
+        <div className="form-group">
+          <input
+            className="form-control"
+            type="text"
+            name="organization"
+            placeholder="Organization Name"
+            value={this.state.organization}
+            onChange={this.onChange.bind(this)} 
+          />
+          <button type="submit" className="btn btn-primary">Search</button>
+        </div>
+        
+      </form>
+
+      <p className="text-danger">{this.state.error}</p>
+
+      <div className="row">
+        {this.state.data.map(repo => {
+          return (
+            <div className="col-12 col-md-6 col-lg-4" key={repo.id}>
+              <div className="card mb-3">
+                <div className="card-body">
+                  <h5 className="card-title">{repo.name}</h5>
+                  <h6 className="card-subtitle mb-2 text-muted">{repo.createdAt}</h6>
+                  <p className="card-text">{repo.description}</p>
+                  <a href={repo.url} className="card-link">Link</a>
+                </div>
+              </div>
+            </div>
+          )
+        })}
+      </div>
     </Layout>
     )
   }
