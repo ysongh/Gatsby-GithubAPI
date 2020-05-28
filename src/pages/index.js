@@ -7,7 +7,9 @@ import { TOKEN } from "../Token";
 
 class IndexPage extends Component{
   state = {
-    organization: ""
+    data: [],
+    organization: "",
+    error: ""
   }
 
   async onSubmit(){
@@ -15,11 +17,15 @@ class IndexPage extends Component{
       query: `
         query { 
           organization(login: "${this.state.organization}"){
-            id
-            name
-            url
-            repositories(privacy: PUBLIC) {
+            repositories(first: 10) {
               totalCount
+              nodes{
+                id
+                name
+                description
+                createdAt
+                url
+              }
             }
           }
         }
@@ -36,8 +42,15 @@ class IndexPage extends Component{
     });
 
     const resultData = await result.json()
-
-    console.log(resultData)
+    if(!resultData.data.organization){
+      this.setState({ error: "Not Found" });
+    }
+    else{
+      this.setState({ 
+        data: resultData.data.organization.repositories.nodes,
+        error: ""
+     });
+    }
   }
 
   onChange(e){
@@ -47,6 +60,7 @@ class IndexPage extends Component{
   }
 
   render(){
+    console.log(this.state.data)
     return(
       <Layout>
       <SEO title="Home" />
@@ -59,6 +73,14 @@ class IndexPage extends Component{
         onChange={this.onChange.bind(this)} 
       />
       <button onClick={this.onSubmit.bind(this)}>Search</button>
+      <p>{this.state.error}</p>
+      {this.state.data.map(repo => {
+        return (
+          <div key={repo.id}>
+            <p>{repo.name}</p>
+          </div>
+        )
+      })}
       <Link to="/page-2/">Go to page 2</Link>
     </Layout>
     )
