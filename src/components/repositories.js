@@ -1,5 +1,6 @@
 import PropTypes from "prop-types"
 import React from "react"
+import Moment from 'react-moment';
 
 const Repositories = ({ data }) => (
     <div className="row">
@@ -9,9 +10,11 @@ const Repositories = ({ data }) => (
                     <div className="card mb-3">
                         <div className="card-body">
                         <h5 className="card-title">{repo.name}</h5>
-                        <h6 className="card-subtitle mb-2 text-muted">{repo.createdAt}</h6>
+                        <h6 className="card-subtitle mb-2 text-muted">
+                            <Moment format="MMM DD, YYYY">{repo.createdAt}</Moment>
+                        </h6>
                         <p className="card-text">{repo.description}</p>
-                        <a href={repo.url} className="card-link">Link</a>
+                        <a href={repo.url} className="card-link" target="_blank">Link to Repo</a>
                         </div>
                     </div>
                 </div>
