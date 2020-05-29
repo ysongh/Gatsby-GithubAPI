@@ -85,12 +85,12 @@ class IndexPage extends Component{
     return(
       <Layout>
       <SEO title="Home" />
-      <h1>Gatsby and Github</h1>
-      <p>Find information about your organisation from Github</p>
-
+      <h1>Find list of repositories from Github</h1>
+      
       <Searchbar
+        label="Enter organization account name"
         name="organization"
-        placeholder="Organization Name"
+        placeholder="ex - ysongh"
         state={this.state.organization}
         onChange={this.onChange.bind(this)}
         onClick={this.onSubmit.bind(this, 0)}/>
