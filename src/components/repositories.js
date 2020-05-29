@@ -14,7 +14,7 @@ const Repositories = ({ data }) => (
                             <Moment format="MMM DD, YYYY">{repo.createdAt}</Moment>
                         </h6>
                         <p className="card-text">{repo.description}</p>
-                        <a href={repo.url} className="card-link" target="_blank">Link to Repo</a>
+                        <a href={repo.url} className="card-link" target="_blank" rel="noreferrer">Link to Repo</a>
                         </div>
                     </div>
                 </div>
