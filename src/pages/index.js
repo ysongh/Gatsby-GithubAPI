@@ -2,6 +2,8 @@ import React, { Component } from "react"
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
+import Searchbar from '../components/searchbar'
+import Repositories from '../components/repositories'
 import { TOKEN } from "../Token"
 
 class IndexPage extends Component{
@@ -74,50 +76,30 @@ class IndexPage extends Component{
   }
 
   render(){
-    console.log(this.state.page, this.state.total)
+    const loadMoreBtn = (
+      <button className="btn btn-primary d-block mx-auto" onClick={this.onSubmit.bind(this, this.state.page)}>
+        Load More
+      </button>
+    )
+    
     return(
       <Layout>
       <SEO title="Home" />
       <h1>Gatsby and Github</h1>
       <p>Find information about your organisation from Github</p>
-      <div className="form-group">
-        <input
-          className="form-control"
-          type="text"
-          name="organization"
-          placeholder="Organization Name"
-          value={this.state.organization}
-          onChange={this.onChange.bind(this)} 
-        />
-      </div>
-      <button className="btn btn-primary" onClick={this.onSubmit.bind(this, 0)}>Search</button>
+
+      <Searchbar
+        name="organization"
+        placeholder="Organization Name"
+        state={this.state.organization}
+        onChange={this.onChange.bind(this)}
+        onClick={this.onSubmit.bind(this, 0)}/>
 
       <p className="mt-3 h4 text-center text-danger">{this.state.error}</p>
 
-      <div className="row">
-        {this.state.data.map(repo => {
-          return (
-            <div className="col-12 col-md-6 col-lg-4" key={repo.id}>
-              <div className="card mb-3">
-                <div className="card-body">
-                  <h5 className="card-title">{repo.name}</h5>
-                  <h6 className="card-subtitle mb-2 text-muted">{repo.createdAt}</h6>
-                  <p className="card-text">{repo.description}</p>
-                  <a href={repo.url} className="card-link">Link</a>
-                </div>
-              </div>
-            </div>
-          )
-        })}
-      </div>
+      <Repositories data={this.state.data} />
 
-      {
-        this.state.page * 12 < this.state.total ? (
-          <button className="btn btn-primary d-block mx-auto" onClick={this.onSubmit.bind(this, this.state.page)}>
-            Load More
-          </button>
-        ) : null
-      }
+      { this.state.page * 12 < this.state.total ? loadMoreBtn : null }
       
     </Layout>
     )
